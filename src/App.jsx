@@ -436,7 +436,14 @@ function App() {
           <div style={{ display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
             <div>
               <div style={{ fontSize: 14, opacity: 0.9 }}>건물주용 한글 관리 웹앱</div>
-              <h1 style={{ margin: "8px 0 6px", fontSize: 32 }}>{buildingName || data.building.name}</h1>
+              <h1 style={{ 
+  margin: "8px 0 6px", 
+  fontSize: 32,
+  color: "white",
+  textShadow: "0 2px 6px rgba(0,0,0,0.5)"
+}}>
+  {data.building.name}
+</h1>
               <div style={{ fontSize: 15, lineHeight: 1.5 }}>{data.building.summaryText}</div>
             </div>
             <div style={{ display: "flex", gap: 8, alignItems: "flex-start", flexWrap: "wrap" }}>
