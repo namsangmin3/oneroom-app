@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { supabase } from "./supabase";
 
 const 기본관리항목 = [
   { category: "가전", name: "세탁기", modelNumber: "", asPhone: "", lastRepairDate: "", status: "정상", note: "" },
@@ -16,8 +17,8 @@ const 기본관리항목 = [
 ];
 
 const 초기데이터 = {
-  building: {
-    name: "해담원룸",
+  building: { 
+    name: "해담빌딩",
     buildYear: "2018",
     address: "부산 해운대구 센텀로 00",
     parkingCount: "6",
@@ -185,6 +186,34 @@ function 요약카드({ title, value, sub }) {
 function App() {
   const [data, setData] = useState(불러오기());
   const [currentTab, setCurrentTab] = useState("전체 현황");
+  const [buildingName, setBuildingName] = useState('');
+
+  useEffect(() => {
+    fetchBuilding()
+  }, [])
+
+  const fetchBuilding = async () => {
+  try {
+    const { data, error } = await supabase
+      .from("buildings")
+      .select("*")
+      .limit(1)
+
+    console.log("buildings data:", data)
+    console.log("buildings error:", error)
+
+    if (error) {
+      console.error("Supabase error:", error.message)
+      return
+    }
+
+    if (data && data.length > 0) {
+      setBuildingName(data[0].name)
+    }
+  } catch (err) {
+    console.error("fetchBuilding catch:", err)
+  }
+}
   const [selectedRoomId, setSelectedRoomId] = useState(불러오기().rooms[0]?.id || "");
   const [search, setSearch] = useState("");
   const [message, setMessage] = useState("저장 기능이 켜져 있어요. 브라우저를 꺼도 데이터가 남아요.");
@@ -407,7 +436,7 @@ function App() {
           <div style={{ display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
             <div>
               <div style={{ fontSize: 14, opacity: 0.9 }}>건물주용 한글 관리 웹앱</div>
-              <h1 style={{ margin: "8px 0 6px", fontSize: 32 }}>{data.building.name}</h1>
+              <h1 style={{ margin: "8px 0 6px", fontSize: 32 }}>{buildingName || data.building.name}</h1>
               <div style={{ fontSize: 15, lineHeight: 1.5 }}>{data.building.summaryText}</div>
             </div>
             <div style={{ display: "flex", gap: 8, alignItems: "flex-start", flexWrap: "wrap" }}>
