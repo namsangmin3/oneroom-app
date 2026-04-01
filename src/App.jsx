@@ -190,6 +190,7 @@ function App() {
 const [isBuildingEdit, setIsBuildingEdit] = useState(false)
 
 const [buildingForm, setBuildingForm] = useState({
+  id: "",
   name: "",
   address: "",
   buildYear: "",
@@ -213,30 +214,56 @@ const fetchBuilding = async () => {
       setBuildingName(buildingRow.name || "")
 
       setData(prev => ({
-        ...prev,
-        building: {
-          ...prev.building,
-          name: buildingRow.name || prev.building.name,
-          buildYear: buildingRow.build_year?.toString() || prev.building.buildYear,
-          address: buildingRow.address || prev.building.address,
-          parkingCount: buildingRow.parking_count?.toString() || prev.building.parkingCount,
-          cctvCount: buildingRow.cctv_count?.toString() || prev.building.cctvCount,
-          buildingType: buildingRow.building_type || prev.building.buildingType,
-          imageUrl: buildingRow.image_url || prev.building.imageUrl,
-          summaryText: buildingRow.summary_text || prev.building.summaryText,
-        }
-      }))
+  ...prev,
+  building: {
+    ...prev.building,
+    id: buildingRow.id || prev.building.id,
+    name: buildingRow.name || prev.building.name,
+    buildYear: buildingRow.build_year?.toString() || prev.building.buildYear,
+    address: buildingRow.address || prev.building.address,
+    parkingCount: buildingRow.parking_count?.toString() || prev.building.parkingCount,
+    cctvCount: buildingRow.cctv_count?.toString() || prev.building.cctvCount,
+    buildingType: buildingRow.building_type || prev.building.buildingType,
+    imageUrl: buildingRow.image_url || prev.building.imageUrl,
+    summaryText: buildingRow.summary_text || prev.building.summaryText,
+  }
+}))
 
       setBuildingForm({
-        name: buildingRow.name || "",
-        address: buildingRow.address || "",
-        buildYear: buildingRow.build_year?.toString() || "",
-        parkingCount: buildingRow.parking_count?.toString() || "",
-        cctvCount: buildingRow.cctv_count?.toString() || "",
-        buildingType: buildingRow.building_type || "",
-      })
+  id: buildingRow.id || "",
+  name: buildingRow.name || "",
+  address: buildingRow.address || "",
+  buildYear: buildingRow.build_year?.toString() || "",
+  parkingCount: buildingRow.parking_count?.toString() || "",
+  cctvCount: buildingRow.cctv_count?.toString() || "",
+  buildingType: buildingRow.building_type || "",
+})
     }
 
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+const saveBuilding = async () => {
+  try {
+    const { error } = await supabase
+      .from('buildings')
+      .update({
+        name: buildingForm.name,
+        address: buildingForm.address,
+        build_year: parseInt(buildingForm.buildYear),
+        parking_count: parseInt(buildingForm.parkingCount),
+        cctv_count: parseInt(buildingForm.cctvCount),
+        building_type: buildingForm.buildingType,
+      })
+      .eq('id', buildingForm.id)
+
+    if (!error) {
+      alert("저장 완료!")
+      setIsBuildingEdit(false)
+      fetchBuilding()
+    }
   } catch (err) {
     console.error(err)
   }
