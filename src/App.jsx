@@ -208,13 +208,22 @@ function App() {
     }
 
     if (data && data.length > 0) {
-  setBuildingName(data[0].name)
+  const buildingRow = data[0]
+
+  setBuildingName(buildingRow.name || "")
 
   setData(prev => ({
     ...prev,
     building: {
       ...prev.building,
-      name: data[0].name
+      name: buildingRow.name || prev.building.name,
+      buildYear: buildingRow.build_year?.toString() || prev.building.buildYear,
+      address: buildingRow.address || prev.building.address,
+      parkingCount: buildingRow.parking_count?.toString() || prev.building.parkingCount,
+      cctvCount: buildingRow.cctv_count?.toString() || prev.building.cctvCount,
+      buildingType: buildingRow.building_type || prev.building.buildingType,
+      imageUrl: buildingRow.image_url || prev.building.imageUrl,
+      summaryText: buildingRow.summary_text || prev.building.summaryText,
     }
   }))
 }
