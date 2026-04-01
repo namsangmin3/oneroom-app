@@ -187,48 +187,58 @@ function App() {
   const [data, setData] = useState(불러오기());
   const [currentTab, setCurrentTab] = useState("전체 현황");
   const [buildingName, setBuildingName] = useState('');
+const [isBuildingEdit, setIsBuildingEdit] = useState(false)
 
+const [buildingForm, setBuildingForm] = useState({
+  name: "",
+  address: "",
+  buildYear: "",
+  parkingCount: "",
+  cctvCount: "",
+  buildingType: "",
+})
   useEffect(() => {
     fetchBuilding()
   }, [])
 
-  const fetchBuilding = async () => {
+const fetchBuilding = async () => {
   try {
     const { data, error } = await supabase
-      .from("buildings")
-      .select("*")
-      .limit(1)
-
-    console.log("buildings data:", data)
-    console.log("buildings error:", error)
-
-    if (error) {
-      console.error("Supabase error:", error.message)
-      return
-    }
+      .from('buildings')
+      .select('*')
 
     if (data && data.length > 0) {
-  const buildingRow = data[0]
+      const buildingRow = data[0]
 
-  setBuildingName(buildingRow.name || "")
+      setBuildingName(buildingRow.name || "")
 
-  setData(prev => ({
-    ...prev,
-    building: {
-      ...prev.building,
-      name: buildingRow.name || prev.building.name,
-      buildYear: buildingRow.build_year?.toString() || prev.building.buildYear,
-      address: buildingRow.address || prev.building.address,
-      parkingCount: buildingRow.parking_count?.toString() || prev.building.parkingCount,
-      cctvCount: buildingRow.cctv_count?.toString() || prev.building.cctvCount,
-      buildingType: buildingRow.building_type || prev.building.buildingType,
-      imageUrl: buildingRow.image_url || prev.building.imageUrl,
-      summaryText: buildingRow.summary_text || prev.building.summaryText,
+      setData(prev => ({
+        ...prev,
+        building: {
+          ...prev.building,
+          name: buildingRow.name || prev.building.name,
+          buildYear: buildingRow.build_year?.toString() || prev.building.buildYear,
+          address: buildingRow.address || prev.building.address,
+          parkingCount: buildingRow.parking_count?.toString() || prev.building.parkingCount,
+          cctvCount: buildingRow.cctv_count?.toString() || prev.building.cctvCount,
+          buildingType: buildingRow.building_type || prev.building.buildingType,
+          imageUrl: buildingRow.image_url || prev.building.imageUrl,
+          summaryText: buildingRow.summary_text || prev.building.summaryText,
+        }
+      }))
+
+      setBuildingForm({
+        name: buildingRow.name || "",
+        address: buildingRow.address || "",
+        buildYear: buildingRow.build_year?.toString() || "",
+        parkingCount: buildingRow.parking_count?.toString() || "",
+        cctvCount: buildingRow.cctv_count?.toString() || "",
+        buildingType: buildingRow.building_type || "",
+      })
     }
-  }))
-}
+
   } catch (err) {
-    console.error("fetchBuilding catch:", err)
+    console.error(err)
   }
 }
   const [selectedRoomId, setSelectedRoomId] = useState(불러오기().rooms[0]?.id || "");
