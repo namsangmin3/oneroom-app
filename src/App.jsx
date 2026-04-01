@@ -208,8 +208,16 @@ function App() {
     }
 
     if (data && data.length > 0) {
-      setBuildingName(data[0].name)
+  setBuildingName(data[0].name)
+
+  setData(prev => ({
+    ...prev,
+    building: {
+      ...prev.building,
+      name: data[0].name
     }
+  }))
+}
   } catch (err) {
     console.error("fetchBuilding catch:", err)
   }
