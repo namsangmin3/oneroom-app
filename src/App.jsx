@@ -588,33 +588,118 @@ const saveBuilding = async () => {
         )}
 
         {currentTab === "건물 정보" && (
-          <div style={{ display: "grid", gap: 16 }}>
+  <div style={{ display: "grid", gap: 16 }}>
+    <div style={{ display: "flex", justifyContent: "flex-end", gap: 8 }}>
+      {!isBuildingEdit ? (
+        <button style={버튼스타일("dark")} onClick={() => setIsBuildingEdit(true)}>
+          수정
+        </button>
+      ) : (
+        <>
+          <button
+            style={버튼스타일("light")}
+            onClick={() => {
+              setIsBuildingEdit(false)
+              fetchBuilding()
+            }}
+          >
+            취소
+          </button>
+          <button style={버튼스타일("dark")} onClick={saveBuilding}>
+            저장
+          </button>
+        </>
+      )}
+    </div>
             <div style={카드스타일()}>
               <h2 style={{ marginTop: 0 }}>건물 기본 정보</h2>
               <div style={{ ...mobileTwoCol, marginBottom: 10 }}>
                 <div>
                   <label>건물명</label>
-                  <input style={입력스타일()} value={data.building.name} onChange={(e) => updateBuildingField("name", e.target.value)} />
+                  {isBuildingEdit ? (
+                    <input
+                      style={입력스타일()}
+                      value={buildingForm.name}
+                      onChange={(e) =>
+                        setBuildingForm({ ...buildingForm, name: e.target.value })
+                      }
+                    />
+                  ) : (
+                    <div style={입력스타일()}>{data.building.name}</div>
+                  )}
                 </div>
                 <div>
                   <label>건축년도</label>
-                  <input style={입력스타일()} type="number" value={data.building.buildYear} onChange={(e) => updateBuildingField("buildYear", e.target.value)} />
+                  {isBuildingEdit ? (
+  <input
+    style={입력스타일()}
+    type="number"
+    value={buildingForm.buildYear}
+    onChange={(e) =>
+      setBuildingForm({ ...buildingForm, buildYear: e.target.value })
+    }
+  />
+) : (
+  <div style={입력스타일()}>{data.building.buildYear}</div>
+)}
                 </div>
                 <div>
                   <label>주소</label>
-                  <input style={입력스타일()} value={data.building.address} onChange={(e) => updateBuildingField("address", e.target.value)} />
+                  {isBuildingEdit ? (
+  <input
+    style={입력스타일()}
+    value={buildingForm.address}
+    onChange={(e) =>
+      setBuildingForm({ ...buildingForm, address: e.target.value })
+    }
+  />
+) : (
+  <div style={입력스타일()}>{data.building.address}</div>
+)}
                 </div>
                 <div>
                   <label>건물 형태</label>
-                  <input style={입력스타일()} value={data.building.buildingType} onChange={(e) => updateBuildingField("buildingType", e.target.value)} />
+                  {isBuildingEdit ? (
+  <input
+    style={입력스타일()}
+    value={buildingForm.buildingType}
+    onChange={(e) =>
+      setBuildingForm({ ...buildingForm, buildingType: e.target.value })
+    }
+  />
+) : (
+  <div style={입력스타일()}>{data.building.buildingType}</div>
+)}
                 </div>
                 <div>
                   <label>주차면수</label>
-                  <input style={입력스타일()} type="number" value={data.building.parkingCount} onChange={(e) => updateBuildingField("parkingCount", e.target.value)} />
+                  {isBuildingEdit ? (
+  <input
+    style={입력스타일()}
+    type="number"
+    value={buildingForm.parkingCount}
+    onChange={(e) =>
+      setBuildingForm({ ...buildingForm, parkingCount: e.target.value })
+    }
+  />
+) : (
+  <div style={입력스타일()}>{data.building.parkingCount}</div>
+)}
                 </div>
                 <div>
                   <label>CCTV 수</label>
-                  <input style={입력스타일()} type="number" value={data.building.cctvCount} onChange={(e) => updateBuildingField("cctvCount", e.target.value)} />
+                  {isBuildingEdit ? (
+  <input
+    style={입력스타일()}
+    type="number"
+    value={buildingForm.cctvCount}
+    onChange={(e) =>
+      setBuildingForm({ ...buildingForm, cctvCount: e.target.value })
+    }
+  />
+) : (
+  <div style={입력스타일()}>{data.building.cctvCount}</div>
+)}
                 </div>
               </div>
               <div style={{ marginBottom: 10 }}>
