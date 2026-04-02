@@ -613,6 +613,28 @@ const saveBuilding = async () => {
     </div>
             <div style={카드스타일()}>
               <h2 style={{ marginTop: 0 }}>건물 기본 정보</h2>
+              <div style={{ display: "flex", justifyContent: "flex-end", gap: 8, marginBottom: 10 }}>
+  {!isBuildingEdit ? (
+    <button style={버튼스타일("dark")} onClick={() => setIsBuildingEdit(true)}>
+      수정
+    </button>
+  ) : (
+    <>
+      <button
+        style={버튼스타일("light")}
+        onClick={() => {
+          setIsBuildingEdit(false)
+          fetchBuilding()
+        }}
+      >
+        취소
+      </button>
+      <button style={버튼스타일("dark")} onClick={saveBuilding}>
+        저장
+      </button>
+    </>
+  )}
+</div>
               <div style={{ ...mobileTwoCol, marginBottom: 10 }}>
                 <div>
                   <label>건물명</label>
