@@ -188,6 +188,9 @@ function App() {
   const [currentTab, setCurrentTab] = useState("전체 현황");
   const [buildingName, setBuildingName] = useState('');
 const [isBuildingEdit, setIsBuildingEdit] = useState(false)
+const [rooms, setRooms] = useState([])
+const [roomsLoading, setRoomsLoading] = useState(false)
+
 
 const [buildingForm, setBuildingForm] = useState({
   id: "",
@@ -200,7 +203,14 @@ const [buildingForm, setBuildingForm] = useState({
 })
   useEffect(() => {
     fetchBuilding()
+    fetchRooms()
   }, [])
+  const roomsByFloor = rooms.reduce((acc, room) => {
+    const floor = room.floor_name || "기타"
+    if (!acc[floor]) acc[floor] = []
+    acc[floor].push(room)
+    return acc
+}, {})
 
 const fetchBuilding = async () => {
   try {
@@ -227,6 +237,37 @@ const fetchBuilding = async () => {
     imageUrl: buildingRow.image_url || prev.building.imageUrl,
     summaryText: buildingRow.summary_text || prev.building.summaryText,
   }
+   const fetchRooms = async () => {
+    try {
+      setRoomsLoading(true)
+
+      const { data, error } = await supabase
+        .from('rooms')
+        .select('*')
+        .order('room_number', { ascending: true })
+
+      if (error) {
+        console.error(error)
+        return
+      }
+
+      setRooms(data || [])
+    } catch (err) {
+      console.error(err)
+    } finally {
+      setRoomsLoading(false)
+    }
+  }
+
+  // 기존 함수
+  const saveBuilding = async () => {
+    ...
+  }
+
+  return (
+    ...
+  )
+}
 }))
 
       setBuildingForm({
